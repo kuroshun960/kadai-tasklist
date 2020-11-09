@@ -11,6 +11,10 @@
             <td>{{ $taskShousai->id }}</td>
         </tr>
         <tr>
+            <th>タイトル</th>
+            <td>{{ $taskShousai->status }}</td>
+        </tr>
+        <tr>
             <th>メッセージ</th>
             <td>{{ $taskShousai->content }}</td>
         </tr>

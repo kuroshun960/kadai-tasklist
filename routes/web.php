@@ -14,6 +14,9 @@
 
 Route::get('/', 'TasksController@index');
 
+//　resourceの第一引数ので命名する複数形の文字列の
+//　”単数系の文字列が自動でURLパラメーター”として設定される。
+
 Route::resource('tasks', 'TasksController');
 
 Route::get('tasks/{id}/copy', 'TasksController@copy');

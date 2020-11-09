@@ -13,6 +13,12 @@
             {!! Form::model($taskMake, ['route' => 'tasks.store']) !!}
 
                 <div class="form-group">
+                    {!! Form::label('status', 'タイトル:') !!}
+                    {!! Form::text('status', null, ['class' => 'form-control']) !!}
+                </div>
+                
+                
+                <div class="form-group">
                     {!! Form::label('content', 'メッセージ:') !!}
                     {!! Form::text('content', null, ['class' => 'form-control']) !!}
                 </div>
@@ -22,5 +28,8 @@
             {!! Form::close() !!}
         </div>
     </div>
+    
+    
+    
 @endsection
 

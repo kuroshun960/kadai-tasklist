@@ -43,11 +43,20 @@ class TasksController extends Controller
      */
     public function store(Request $request)
     {
+        
+        $request->validate([ 
+            'content' => 'required|max:255',
+            'status' => 'required|max:10',
+            ]);
+        
+        
+        
         //$requestはPOSTみたいなもの
         //tinkerのインスタンス生成、上書き、保存
         
         $tasksave = new Task;
         $tasksave->content = $request->content;
+        $tasksave->status = $request->status;
         $tasksave->save();
         
         //登録したらトップにリダイレクト
@@ -95,10 +104,17 @@ class TasksController extends Controller
      */
     public function update(Request $request, $id)
     {
+        
+        $request->validate([
+            'content' => 'required|max:255',
+            'status' => 'required|max:10',
+        ]);
+        
         //editページから送られてきたidのコンテンツをデータベースへ上書き保存
         $taskUpdate = Task::findOrFail($id);
         
         $taskUpdate->content = $request->content;
+        $taskUpdate->status = $request->status;
         $taskUpdate->save();
         
         return redirect('/');
