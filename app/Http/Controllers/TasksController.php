@@ -15,10 +15,36 @@ class TasksController extends Controller
      */
     public function index()
     {
-        //
-        $taskIchiran = Task::all();
         
+        /*
+        タスクを全て取得し一覧でインデックスに表示
+        $taskIchiran = Task::all();
         return view('tasks.index',['taskIchiran' => $taskIchiran,]);
+        
+        ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+        
+        認証済みユーザーはタスクを新しい順に表示
+        */
+        
+        $data = [];
+        if (\Auth::check()) { // 認証済みの場合
+            // 認証済みユーザを取得
+            $user = \Auth::user();
+            // ユーザの投稿の一覧を作成日時の降順で取得
+            $taskIchiran = $user->tasks()->orderBy('created_at', 'desc')->paginate(10);
+
+            $data = [
+                'user' => $user,
+                'taskIchiran' => $taskIchiran,
+            ];
+        }
+
+        // Welcomeビューでログイン済なら$data配列を表示に使える
+        // Welcomeビューで未ログインなら通常のwelcomページを表示
+        
+        return view('welcome', $data);
+        
+        
     }
 
     /**
@@ -44,12 +70,12 @@ class TasksController extends Controller
     public function store(Request $request)
     {
         
+        /*
+        
         $request->validate([ 
             'content' => 'required|max:255',
             'status' => 'required|max:10',
             ]);
-        
-        
         
         //$requestはPOSTみたいなもの
         //tinkerのインスタンス生成、上書き、保存
@@ -61,6 +87,27 @@ class TasksController extends Controller
         
         //登録したらトップにリダイレクト
         return redirect('/');
+        
+        ↓↓↓↓↓↓↓↓↓↓↓↓↓
+
+        */
+        
+        //バリデーシ
+        
+        $request->validate([
+            'content' => 'required|max:255',
+            'status' => 'required|max:10',
+        ]);
+        
+        // 認証済みユーザ（閲覧者）の投稿として作成（リクエストされた値をもとに作成）
+        $request->user()->tasks()->create([
+            'content' => $request->content,
+            'status' => $request->status,
+        ]);
+        
+        // 前のURLへリダイレクトさせる
+        return redirect('/');
+        
         
     }
 
@@ -128,10 +175,29 @@ class TasksController extends Controller
      */
     public function destroy($id)
     {
-        //
+        /*
         $taskDelete = Task::findOrFail($id);
         
         $taskDelete->delete();
         return redirect('/');
+        */
+        
+ 
+        // idの値で投稿を検索して取得
+        $task = \App\Task::findOrFail($id);
+
+        // 認証済みユーザ（閲覧者）がその投稿の所有者である場合は、投稿を削除
+        if (\Auth::id() === $task->user_id) {
+            $task->delete();
+        }
+
+        // 前のURLへリダイレクトさせる
+        return redirect('/');
+        
+        
+        
+        
+        
+        
     }
 }

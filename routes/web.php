@@ -17,14 +17,15 @@
 //　resourceの第一引数ので命名する複数形の文字列の
 //　”単数系の文字列が自動でURLパラメーター”として設定される。
 
-
+/*
 Route::get('/', function () {
     return view('welcome');
 });
+*/
 
+Route::get('/', 'TasksController@index');
 
-//Route::get('/', 'TasksController@index');
-//Route::resource('tasks', 'TasksController');
+Route::resource('tasks', 'TasksController');
 
 
 
@@ -59,6 +60,8 @@ Route::get('/', function () {
         
 Route::group( ['middleware',['auth']],function(){
     
-
+    
+    //タスクのルーティングを設定します（登録のstoreと削除のdestroyのみ認証済みじゃないと見れない）
+    Route::resource('tasks', 'TasksController', ['only' => ['store', 'destroy']]);
     
 });
