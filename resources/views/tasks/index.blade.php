@@ -11,8 +11,8 @@
             <thead>
                 <tr>
                     <th>id</th>
-                    <th>タイトル</th>
                     <th>タスク</th>
+                    <th>進捗</th>
                 </tr>
             </thead>
             <tbody>

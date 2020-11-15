@@ -11,13 +11,14 @@
             <td>{{ $taskShousai->id }}</td>
         </tr>
         <tr>
-            <th>タイトル</th>
-            <td>{{ $taskShousai->status }}</td>
-        </tr>
-        <tr>
-            <th>メッセージ</th>
+            <th>タスク</th>
             <td>{{ $taskShousai->content }}</td>
         </tr>
+        <tr>
+            <th>進捗</th>
+            <td>{{ $taskShousai->status }}</td>
+        </tr>
+
     </table>
     
     
