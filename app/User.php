@@ -53,5 +53,14 @@ class User extends Authenticatable
         $this->loadCount('tasks');
     }
     
+    
+    public function favoritesNow(){
+            return $this->belongsToMany(User::class, 'user_follow','user_id','follow_id')->withTimestamps();
+        }
+        
+
+    
+    
+    
 }
 
