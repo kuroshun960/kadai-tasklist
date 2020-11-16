@@ -122,8 +122,14 @@ class TasksController extends Controller
         //  リクエストのidを格納される　idがないとエラーに飛ばす関数
         $taskShousai = Task::findOrFail($id);
         
+        //  自分の認証id=タスクのユーザーidなら（自分の投稿タスクなら）タスク詳細を表示
+        if (\Auth::id() === $taskShousai->user_id) {
+        
         //  task.show.bladeに渡す
         return view('tasks.show',['taskShousai' => $taskShousai]);
+        
+        }
+        return redirect('/');
         
     }
 
@@ -138,7 +144,13 @@ class TasksController extends Controller
         //showページから送られてきたidのedit（編集）ページに渡す処理
         $taskHenshu = Task::findOrFail($id);
         
+        //  自分の認証id=タスクのユーザーidなら（自分の投稿タスクなら）編集ページを表示
+        if (\Auth::id() === $taskHenshu->user_id) {
+        
         return view('tasks.edit',['taskHenshu' => $taskHenshu]);
+        
+        }
+        return redirect('/');
         
     }
 
@@ -160,9 +172,14 @@ class TasksController extends Controller
         //editページから送られてきたidのコンテンツをデータベースへ上書き保存
         $taskUpdate = Task::findOrFail($id);
         
+        // 認証済みユーザ（閲覧者）がその投稿の所有者である場合は上書き
+        if (\Auth::id() === $taskUpdate->user_id) {
+        
         $taskUpdate->content = $request->content;
         $taskUpdate->status = $request->status;
         $taskUpdate->save();
+        
+        }
         
         return redirect('/');
     }
