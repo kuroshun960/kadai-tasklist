@@ -43,21 +43,29 @@ class User extends Authenticatable
      *  $インスタンス->tasks()->get()　で取得できるようになる
      */
     
+    //このユーザが所有するタスク。（ Taskモデルとの関係を定義）
+    
         public function tasks()
     {
         return $this->hasMany(Task::class);
     }
     
-        public function loadRelationshipCounts()
-    {
-        $this->loadCount('tasks');
-    }
     
+    
+    
+    // 1.ユーザーモデルのクラス 2.お気に入り中間テーブル名 3.ユーザーモデルのidとつながってる中間id  4.相手先のidとつながってる中間id
     
     public function favoritesNow(){
-            return $this->belongsToMany(User::class, 'user_follow','user_id','follow_id')->withTimestamps();
+            return $this->belongsToMany(User::class, 'favorites','user_id','micropost_id')->withTimestamps();
         }
-        
+    
+    
+    //このユーザに関係するお気に入りの件数をカウントする。（'リレーション名'）
+    
+        public function loadRelationshipCounts()
+    {
+        $this->loadCount('favoritesNow');
+    }  
 
     
     

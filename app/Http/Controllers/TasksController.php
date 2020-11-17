@@ -57,9 +57,17 @@ class TasksController extends Controller
         //tinkerのインスタンス生成の構文とおなじ
         $taskMake = new Task;
         
+        
+        if (\Auth::check()) {
         //  task.create.bladeに渡す
         return view('tasks.create',['taskMake' => $taskMake,]);
+        }
+        
+        return redirect('/');
     }
+    
+    
+    
 
     /**
      * Store a newly created resource in storage.
@@ -92,7 +100,7 @@ class TasksController extends Controller
 
         */
         
-        //バリデーシ
+        //バリデーション
         
         $request->validate([
             'content' => 'required|max:255',
@@ -122,7 +130,7 @@ class TasksController extends Controller
         //  リクエストのidを格納される　idがないとエラーに飛ばす関数
         $taskShousai = Task::findOrFail($id);
         
-        //  自分の認証id=タスクのユーザーidなら（自分の投稿タスクなら）タスク詳細を表示
+        //  自分の認証id=タスクのユーザーidなら（自分の投稿タスクなら）
         if (\Auth::id() === $taskShousai->user_id) {
         
         //  task.show.bladeに渡す
